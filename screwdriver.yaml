@@ -7,7 +7,7 @@ annotations:
 jobs:
     other-job:
         steps:
-            - echo: echi hi
+            - echo: echo hi
     first-job:
         requires: [ ~pr, ~commit ]
         steps:
