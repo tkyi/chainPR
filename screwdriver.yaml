@@ -5,6 +5,9 @@ annotations:
     screwdriver.cd/chainPR: true
 
 jobs:
+    other-job:
+        steps:
+            - echo: echi hi
     first-job:
         requires: [ ~pr, ~commit ]
         steps:
