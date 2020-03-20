@@ -17,7 +17,7 @@ jobs:
     requires: [~sd@49:client-functional-test]
   server:
     requires: [~sd@49:docker]
-  sc:
+  sc2:
     requires: [~sd@555:scft]
   ci:
     requires: [~sd@555:console-id]
