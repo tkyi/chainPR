@@ -1,18 +1,27 @@
 shared:
     image: node:8
-
-annotations:
-    screwdriver.cd/chainPR: true
-
+    steps:
+        echo: echo hi
 jobs:
-    other-job:
-        steps:
-            - echo: echo hi
-    first-job:
-        requires: [ ~pr, ~commit ]
-        steps:
-            - echo: echo "this is first job."
-    second-job:
-        requires: [ first-job ]
-        steps:
-            - echo: echo "this is second job."
+  main:
+    requires: [~pr, ~commit]
+  sc:
+    requires: [~sd@555:cd]
+  sr:
+    requires: [~sd@555:sdf]
+  sy:
+    requires: [~sd@555:yd]
+  te:
+    requires: [~sd@1002884:ted, ~sd@222:cd ]
+  client:
+    requires: [~sd@49:client-functional-test]
+  server:
+    requires: [~sd@49:docker]
+  sc:
+    requires: [~sd@555:scft]
+  ci:
+    requires: [~sd@555:console-id]
+  tp:
+    requires: [~sd@333:functestserver-docker, ~sd@333:functest-script]
+  b:
+    requires: [~sd@555:bd]
