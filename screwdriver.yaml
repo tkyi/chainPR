@@ -1,7 +1,7 @@
 shared:
     image: node:8
     steps:
-        echo: echo hi
+        - echo: echo hi
 jobs:
   main:
     requires: [~pr, ~commit]
@@ -12,7 +12,7 @@ jobs:
   sy:
     requires: [~sd@555:yd]
   te:
-    requires: [~sd@1002884:ted, ~sd@222:cd ]
+    requires: [~sd@777:ted, ~sd@222:cd ]
   client:
     requires: [~sd@49:client-functional-test]
   server:
