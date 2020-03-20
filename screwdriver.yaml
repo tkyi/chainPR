@@ -1,18 +1,38 @@
 shared:
     image: node:8
-
-annotations:
-    screwdriver.cd/chainPR: true
-
+    steps:
+        - echo: echo hi
 jobs:
-    other-job:
-        steps:
-            - echo: echo hi
-    first-job:
-        requires: [ ~pr, ~commit ]
-        steps:
-            - echo: echo "this is first job."
-    second-job:
-        requires: [ first-job ]
-        steps:
-            - echo: echo "this is second job."
+  api-rh6:
+    requires: []
+  api-rh7:
+    requires: []
+  api-rh8:
+    requires: []
+  server:
+    requires: [~pr, ~commit, api-rh6, api-rh7, api-rh8]
+    blockedBy: [~api-rh6, ~api-rh7, ~api-rh8]
+  server-functional-test:
+    requires: [~pr, server]
+  docker:
+    requires: [~pr, ~commit, ~server-functional-test]
+  client-ubuntu16:
+    requires: [~pr, ~commit, api-rh6, api-rh7, api-rh8]
+    blockedBy: [~api-rh6, ~api-rh7, ~api-rh8]
+  client-rh6:
+    requires: [~pr, ~commit, api-rh6, api-rh7, api-rh8]
+    blockedBy: [~api-rh6, ~api-rh7, ~api-rh8]
+  client-rh7:
+    requires: [~pr, ~commit, api-rh6, api-rh7, api-rh8]
+    blockedBy: [~api-rh6, ~api-rh7, ~api-rh8]
+  client-rh8:
+    requires: [~pr, ~commit, api-rh6, api-rh7, api-rh8]
+    blockedBy: [~api-rh6, ~api-rh7, ~api-rh8]
+  client-b-rh6:
+    requires: [~pr, client-rh6, client-rh7, client-rh8]
+  client-b-rh7:
+    requires: [~pr, client-rh6, client-rh7, client-rh8]
+  client-functional-test:
+    requires: [~pr, client-rh6, client-rh7, client-rh8]
+  docs-publish:
+    requires: []
