@@ -1,18 +1,183 @@
 shared:
     image: node:8
-
-annotations:
-    screwdriver.cd/chainPR: true
+    steps:
+        - echo: echo hi
 
 jobs:
-    other-job:
-        steps:
-            - echo: echo hi
-    first-job:
-        requires: [ ~pr, ~commit ]
-        steps:
-            - echo: echo "this is first job."
-    second-job:
-        requires: [ first-job ]
-        steps:
-            - echo: echo "this is second job."
+  weekly-upgrade:
+    requires: []
+  chu:
+    requires: [weekly-upgrade]
+  pu:
+    requires: []
+  yiv_upgrade:
+    requires: [weekly-upgrade]
+
+  sc:
+    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:sc, ~sd@50:sr, ~sd@50:sy]
+  sd:
+    blockedBy: [~sdcu, ~sdru, ~sdyu, ~st]
+    requires: [sc]
+  sdcu:
+    blockedBy: [~sd]
+    requires: [weekly-upgrade]
+  sdru:
+    blockedBy: [~sd]
+    requires: [weekly-upgrade]
+  sdyu:
+    blockedBy: [~sd]
+    requires: [weekly-upgrade]
+  st:
+    blockedBy: [~st_upgrade, ~cbs, ~sd]
+    requires: [sd]
+  st_upgrade:
+    blockedBy: [~st]
+    requires: [sdcu, sdru, sdyu]
+
+  ys:
+    blockedBy: [~ysu]
+    requires: [st]
+  ysu:
+    blockedBy: [~ys]
+    requires: [st_upgrade]
+  yp:
+    blockedBy: [~ypu]
+    requires: [ys]
+  ypu:
+    blockedBy: [~yp]
+    requires: [ysu]
+
+  scv:
+    requires: [~sc]
+  su:
+    requires: [~scv, ~st]
+  suu:
+    blockedBy: [~su]
+    requires: []
+  sp:
+    requires: []
+  spu:
+    requires: []
+
+  tec:
+    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:te]
+  tes:
+    blockedBy: [~tesu]
+    requires: [tec]
+  tesu:
+    blockedBy: [~tes]
+    requires: [weekly-upgrade]
+  tef:
+    blockedBy: [~tefu]
+    requires: [tes]
+  tefu:
+    blockedBy: [~tef]
+    requires: [tesu]
+  tep:
+    blockedBy: [~tepu]
+    requires: [tef]
+  tepu:
+    blockedBy: [~tep]
+    requires: [tefu]
+
+  client-component:
+    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:client]
+  client_staging:
+    blockedBy: [~client_staging_upgrade]
+    requires: [client-component]
+  client_staging_upgrade:
+    blockedBy: [~client_staging]
+    requires: [weekly-upgrade]
+  client-version-committed:
+    requires: [~commit]
+  client-pre-promote:
+    requires: [client-version-committed, client_staging]
+  client-promote:
+    requires: [~sd@555:functest-client-promote-finished]
+  component:
+    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:server]
+  dev_upgrade:
+    requires: [weekly-upgrade]
+  integration:
+    blockedBy:
+      - ~integration_upgrade
+      - ~client-integration
+      - ~client-integration_upgrade
+      - ~sd@555:functest-client-stable-integration-c6
+      - ~sd@555:functest-client-stable-integration-c7
+      - ~sd@555:functest-client-stable-integration-u16
+    requires: [component]
+  integration_upgrade:
+    blockedBy: [~integration, ~client-integration, ~client-integration_upgrade]
+    requires: [weekly-upgrade]
+  client-integration:
+    blockedBy: [~client-integration_upgrade, ~integration, ~integration_upgrade]
+    requires: [integration]
+  client-integration_upgrade:
+    blockedBy: [~client-integration, ~integration, ~integration_upgrade]
+    requires: [integration_upgrade]
+  server-functional-test-promote:
+    requires: [integration]
+  client-functional-test-promote:
+    requires: [client-promote]
+  canary:
+    blockedBy: [~canary_upgrade]
+    requires: [client-integration]
+  canary_upgrade:
+    blockedBy: [~canary]
+    requires: [client-integration_upgrade]
+  bucket0:
+    blockedBy: [~bucket0_upgrade]
+    requires: [canary]
+  bucket0_upgrade:
+    blockedBy: [~bucket0]
+    requires: [canary_upgrade]
+  bucket1:
+    blockedBy: [~bucket1_upgrade]
+    requires: [bucket0]
+  bucket1_upgrade:
+    blockedBy: [~bucket1]
+    requires: [bucket0_upgrade]
+
+  cbc:
+    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:ci]
+
+  tools-server_staging:
+    requires: [cbc]
+  tools-server_staging_upgrade:
+    blockedBy: [~tools-server_staging]
+    requires: [weekly-upgrade]
+
+  cbs:
+    blockedBy: [~cbsu, ~st]
+    requires: [tools-server_staging]
+  cbsu:
+    blockedBy: [~cbs]
+    requires: [tools-server_staging_upgrade]
+
+  scc:
+    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:sc]
+  scs:
+    blockedBy: [~scsu]
+    requires: [scc]
+  scsu:
+    blockedBy: [~scs]
+    requires: [weekly-upgrade]
+
+  tc:
+    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:tp]
+  ts:
+    blockedBy: [~tsu]
+    requires: [tc]
+  tsu:
+    blockedBy: [~ts]
+    requires: [weekly-upgrade]
+  tpu:
+    requires: [tsu]
+  tdu:
+    requires: [weekly-upgrade]
+
+  bc:
+    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:b]
+  bs:
+    requires: [bc]
