@@ -1,18 +1,11 @@
 shared:
     image: node:8
-
-annotations:
-    screwdriver.cd/chainPR: true
-
+    steps:
+        - echo: echo hi
 jobs:
-    other-job:
-        steps:
-            - echo: echo hi
-    first-job:
-        requires: [ ~pr, ~commit ]
-        steps:
-            - echo: echo "this is first job."
-    second-job:
-        requires: [ first-job ]
-        steps:
-            - echo: echo "this is second job."
+    component: 
+        requires: [~sd@9:component-all, ~commit] 
+                  
+    deploy-ci_prod: 
+        requires: [component] 
+        blockedBy: [ ~sd@8:certify-ci_prod, ~sd@555:smoke-ci_prod, ~sd@555:test-ci_prod ]
