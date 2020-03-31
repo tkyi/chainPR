@@ -1,18 +1,24 @@
 shared:
     image: node:8
-
-annotations:
-    screwdriver.cd/chainPR: true
+    steps:
+      - echo: echo hi
 
 jobs:
-    other-job:
-        steps:
-            - echo: echo hi
-    first-job:
-        requires: [ ~pr, ~commit ]
-        steps:
-            - echo: echo "this is first job."
-    second-job:
-        requires: [ first-job ]
-        steps:
-            - echo: echo "this is second job."
+  compile-commit:
+    requires: [~commit]
+    
+  test-cases-serial-1-commit:
+    requires: [ ~commit]
+
+  test-cases-serial-2-commit:
+    requires: [~commit]
+
+  test-cases-unittest-commit:
+    requires: [~commit]
+
+  component:
+    requires: [test-cases-unittest-commit, test-cases-serial-2-commit, test-cases-serial-1-commit, compile-commit]
+    
+  certify-ci_prod:
+    requires:
+      - ~sd@10:deploy-ci_prod
