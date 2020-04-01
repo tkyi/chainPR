@@ -4,21 +4,11 @@ shared:
       - echo: echo hi
 
 jobs:
-  compile-commit:
-    requires: [~commit]
+  tag:
+    requires: [~test1, ~test2]
     
-  test-cases-serial-1-commit:
-    requires: [ ~commit]
-
-  test-cases-serial-2-commit:
+  test1:
     requires: [~commit]
 
-  test-cases-unittest-commit:
+  test2:
     requires: [~commit]
-
-  component:
-    requires: [test-cases-unittest-commit, test-cases-serial-2-commit, test-cases-serial-1-commit, compile-commit]
-    
-  certify-ci_prod:
-    requires:
-      - ~sd@10:deploy-ci_prod
