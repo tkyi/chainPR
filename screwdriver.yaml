@@ -1,3 +1,4 @@
+# pipeline 16
 shared:
     image: node:8
     steps:
@@ -14,7 +15,7 @@ jobs:
     requires: [weekly-upgrade]
 
   sc:
-    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:sc, ~sd@50:sr, ~sd@50:sy]
+    requires: [~pr, ~commit, ~sd@15:main, ~sd@15:sc, ~sd@15:sr, ~sd@15:sy]
   sd:
     blockedBy: [~sdcu, ~sdru, ~sdyu, ~st]
     requires: [sc]
@@ -60,7 +61,7 @@ jobs:
     requires: []
 
   tec:
-    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:te]
+    requires: [~pr, ~commit, ~sd@15:main, ~sd@15:te]
   tes:
     blockedBy: [~tesu]
     requires: [tec]
@@ -81,7 +82,7 @@ jobs:
     requires: [tefu]
 
   client-component:
-    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:client]
+    requires: [~pr, ~commit, ~sd@15:main, ~sd@15:client]
   client_staging:
     blockedBy: [~client_staging_upgrade]
     requires: [client-component]
@@ -95,7 +96,7 @@ jobs:
   client-promote:
     requires: [~sd@555:functest-client-promote-finished]
   component:
-    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:server]
+    requires: [~pr, ~commit, ~sd@15:main, ~sd@15:server]
   dev_upgrade:
     requires: [weekly-upgrade]
   integration:
@@ -140,7 +141,7 @@ jobs:
     requires: [bucket0_upgrade]
 
   cbc:
-    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:ci]
+    requires: [~pr, ~commit, ~sd@15:main, ~sd@15:ci]
 
   tools-server_staging:
     requires: [cbc]
@@ -156,7 +157,7 @@ jobs:
     requires: [tools-server_staging_upgrade]
 
   scc:
-    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:sc]
+    requires: [~pr, ~commit, ~sd@15:main, ~sd@15:sc]
   scs:
     blockedBy: [~scsu]
     requires: [scc]
@@ -165,7 +166,7 @@ jobs:
     requires: [weekly-upgrade]
 
   tc:
-    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:tp]
+    requires: [~pr, ~commit, ~sd@15:main, ~sd@15:tp]
   ts:
     blockedBy: [~tsu]
     requires: [tc]
@@ -178,6 +179,6 @@ jobs:
     requires: [weekly-upgrade]
 
   bc:
-    requires: [~pr, ~commit, ~sd@50:main, ~sd@50:b]
+    requires: [~pr, ~commit, ~sd@15:main, ~sd@15:b]
   bs:
     requires: [bc]
