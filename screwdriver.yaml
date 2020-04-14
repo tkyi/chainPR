@@ -15,7 +15,7 @@ jobs:
   te:
     requires: [~sd@777:ted, ~sd@222:cd ]
   client:
-    requires: [~sd@14:client-functional-test]
+    requires: [~sd@14:client-functional-test-publish, ~sd@14:client-functional-test]
   server:
     requires: [~sd@14:docker]
   sc2:
