@@ -1,18 +1,90 @@
 shared:
-    image: node:8
-
-annotations:
-    screwdriver.cd/chainPR: true
+  image: node:8
+  steps:
+    - echo: echo hi
 
 jobs:
-    other-job:
-        steps:
-            - echo: echo hi
-    first-job:
-        requires: [ ~pr, ~commit ]
-        steps:
-            - echo: echo "this is first job."
-    second-job:
-        requires: [ first-job ]
-        steps:
-            - echo: echo "this is second job."
+  noop:
+    requires: [~commit]
+    
+  replication-start-cmr:
+    requires: []
+
+  replication-bucket-deployment:
+    requires: [replication-start-cmr]
+
+  bucket-deployment-b1:
+    requires: [replication-bucket-deployment]
+
+  bucket-deployment-g1:
+    requires: [replication-bucket-deployment]
+    blockedBy: [~bucket-deployment-b1]
+
+  bucket-deployment-n1:
+    requires: [replication-bucket-deployment]
+    blockedBy: [~bucket-deployment-g1]
+
+  bucket-deployment-s3:
+    requires: [replication-bucket-deployment]
+    blockedBy: [~bucket-deployment-n1]
+
+  bucket-deployment-t1:
+    requires: [replication-bucket-deployment]
+    blockedBy: [~bucket-deployment-s3]
+
+  bucket-deployment-i2:
+    requires: [replication-bucket-deployment]
+    blockedBy: [~bucket-deployment-t1]
+
+  replication-bucket-validation:
+    requires: [bucket-deployment-b1,bucket-deployment-g1,bucket-deployment-n1,bucket-deployment-s3,bucket-deployment-t1,bucket-deployment-i2]
+
+  bucket-validation-b1:
+    requires: [replication-bucket-validation]
+
+  bucket-validation-g1:
+    requires: [replication-bucket-validation]
+
+  bucket-validation-n1:
+    requires: [replication-bucket-validation]
+
+  bucket-validation-s3:
+    requires: [replication-bucket-validation]
+
+  bucket-validation-t1:
+    requires: [replication-bucket-validation]
+
+  bucket-validation-i2:
+    requires: [replication-bucket-validation]
+
+  replication-prod-deployment:
+    requires: [bucket-validation-b1,bucket-validation-g1,bucket-validation-n1,bucket-validation-s3,bucket-validation-t1,bucket-validation-i2]
+
+  prod-deployment-b1:
+    requires: [replication-prod-deployment]
+
+  prod-deployment-g1:
+    requires: [replication-prod-deployment]
+    blockedBy: [~prod-deployment-b1]
+
+  prod-deployment-n1:
+    requires: [replication-prod-deployment]
+    blockedBy: [~prod-deployment-g1]
+
+  prod-deployment-s3:
+    requires: [replication-prod-deployment]
+    blockedBy: [~prod-deployment-n1]
+
+  prod-deployment-t1:
+    requires: [replication-prod-deployment]
+    blockedBy: [~prod-deployment-s3]
+
+  prod-deployment-i2:
+    requires: [replication-prod-deployment]
+    blockedBy: [~prod-deployment-t1]
+
+  replication-close-cmr:
+    requires: [prod-deployment-b1,prod-deployment-g1,prod-deployment-n1,prod-deployment-s3,prod-deployment-t1,prod-deployment-i2]
+
+  replication-singlehost-deploy:
+    requires: []
