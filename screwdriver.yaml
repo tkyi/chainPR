@@ -59,6 +59,8 @@ jobs:
 
   replication-prod-deployment:
     requires: [bucket-validation-b1,bucket-validation-g1,bucket-validation-n1,bucket-validation-s3,bucket-validation-t1,bucket-validation-i2]
+    steps:
+      - sleep: sleep 30
 
   prod-deployment-b1:
     requires: [replication-prod-deployment]
