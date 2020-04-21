@@ -41,21 +41,33 @@ jobs:
 
   bucket-validation-b1:
     requires: [replication-bucket-validation]
+    steps:
+      - sleep: sleep 30
 
   bucket-validation-g1:
     requires: [replication-bucket-validation]
+    steps:
+      - sleep: sleep 30
 
   bucket-validation-n1:
     requires: [replication-bucket-validation]
+    steps:
+      - sleep: sleep 30
 
   bucket-validation-s3:
     requires: [replication-bucket-validation]
+    steps:
+      - sleep: sleep 30
 
   bucket-validation-t1:
     requires: [replication-bucket-validation]
+    steps:
+      - sleep: sleep 30
 
   bucket-validation-i2:
     requires: [replication-bucket-validation]
+    steps:
+      - sleep: sleep 30
 
   replication-prod-deployment:
     requires: [bucket-validation-b1,bucket-validation-g1,bucket-validation-n1,bucket-validation-s3,bucket-validation-t1,bucket-validation-i2]
