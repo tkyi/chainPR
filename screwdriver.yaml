@@ -1,11 +1,12 @@
+# pipeline 2
 shared:
     image: node:8
     steps:
         - echo: echo hi
 jobs:
-    component: 
-        requires: [~sd@9:component-all, ~commit] 
-                  
-    deploy-ci_prod: 
-        requires: [component] 
-        blockedBy: [ ~sd@8:certify-ci_prod, ~sd@555:smoke-ci_prod, ~sd@555:test-ci_prod ]
+    pr:
+        requires: [~pr]
+    release:
+        requires: [~commit]
+    tag:
+        requires: [~sd@4:functional-test-rksd]
